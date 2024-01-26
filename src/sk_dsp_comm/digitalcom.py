@@ -1233,6 +1233,9 @@ def mux_pilot_blocks(iq_data, npb):
 
 
 def ofdm_tx(iq_data, nf, nc, npb=0, cp=False, ncp=0):
+    nf=int(nf)
+    nc=int(nc)
+    ncp=int(ncp)
     """
     Parameters
     ----------
@@ -1370,6 +1373,9 @@ def chan_est_equalize(z, npbp, alpha, ht=None):
 
 
 def ofdm_rx(x, nf, nc, npb=0, cp=False, ncp=0, alpha=0.95, ht=None):
+    nf=int(nf)
+    nc=int(nc)
+    ncp=int(ncp)
     """
     Parameters
     ----------
