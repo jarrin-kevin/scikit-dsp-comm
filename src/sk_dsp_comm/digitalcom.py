@@ -1274,7 +1274,7 @@ def ofdm_tx(iq_data, nf, nc, npb=0, cp=False, ncp=0):
     iq_data = iq_data[:N_OFDM * nf]
     IQ_s2p = np.reshape(iq_data, (N_OFDM, nf))  # carrier symbols by column
     print(IQ_s2p.shape)
-    x_out_all = np.zeros((N_OFDM, N), dtype=np.complex128)
+    x_out_all = np.zeros((N_OFDM, nc), dtype=np.complex128)
     if npb > 0:
         IQ_s2p = mux_pilot_blocks(IQ_s2p, npb)
         N_OFDM = IQ_s2p.shape[0]
