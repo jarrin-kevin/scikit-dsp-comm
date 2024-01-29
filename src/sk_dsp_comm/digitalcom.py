@@ -1274,6 +1274,7 @@ def ofdm_tx(iq_data, nf, nc, npb=0, cp=False, ncp=0):
     iq_data = iq_data[:N_OFDM * nf]
     IQ_s2p = np.reshape(iq_data, (N_OFDM, nf))  # carrier symbols by column
     print(IQ_s2p.shape)
+    x_out_all = np.zeros((N_OFDM, N), dtype=np.complex128)
     if npb > 0:
         IQ_s2p = mux_pilot_blocks(IQ_s2p, npb)
         N_OFDM = IQ_s2p.shape[0]
@@ -1293,6 +1294,7 @@ def ofdm_tx(iq_data, nf, nc, npb=0, cp=False, ncp=0):
                 buff[nc + n_freq] = IQ_s2p[k, nf + n_freq]
                
         x_out_buff = fft.ifft(buff)
+        x_out_all[k, :] = x_out_buff
         if cp:
             # With cyclic prefix
             x_out[k * (nc + ncp):(k + 1) * (nc + ncp)] = np.concatenate((x_out_buff[nc - ncp:],
@@ -1300,7 +1302,7 @@ def ofdm_tx(iq_data, nf, nc, npb=0, cp=False, ncp=0):
         else:
             # No cyclic prefix included
             x_out[k * nc:(k + 1) * nc] = x_out_buff
-    return x_out,x_out_buff
+    return x_out,x_out_all
 
 
 def chan_est_equalize(z, npbp, alpha, ht=None):
