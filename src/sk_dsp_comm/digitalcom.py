@@ -1291,15 +1291,16 @@ def ofdm_tx(iq_data, nf, nc, npb=0, cp=False, ncp=0):
                 buff[n_freq] = IQ_s2p[k, n_freq - 1]
             else:  # Modulate carriers f = -Nf/2:-1
                 buff[nc + n_freq] = IQ_s2p[k, nf + n_freq]
+               
+        x_out_buff = fft.ifft(buff)
         if cp:
             # With cyclic prefix
-            x_out_buff = fft.ifft(buff)
             x_out[k * (nc + ncp):(k + 1) * (nc + ncp)] = np.concatenate((x_out_buff[nc - ncp:],
                                                                          x_out_buff))
         else:
             # No cyclic prefix included
-            x_out[k * nc:(k + 1) * nc] = fft.ifft(buff)
-    return x_out
+            x_out[k * nc:(k + 1) * nc] = x_out_buff
+    return x_out,x_out_buff
 
 
 def chan_est_equalize(z, npbp, alpha, ht=None):
